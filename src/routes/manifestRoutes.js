@@ -9,6 +9,8 @@ router.get("/", async (req, res) => {
       version: -1,
     });
 
+    const lucenaMapStyleUrl = process.env.LUCENA_MAP_STYLE_URL || "";
+
     res.json({
       success: true,
       data: {
@@ -22,13 +24,17 @@ router.get("/", async (req, res) => {
           : null,
 
         lucenaMap: {
-          enabled: Boolean(process.env.LUCENA_MAP_STYLE_URL),
+          enabled: Boolean(lucenaMapStyleUrl),
           version: Number(process.env.LUCENA_MAP_VERSION || 1),
-          styleUrl: process.env.LUCENA_MAP_STYLE_URL || null,
+          styleUrl: lucenaMapStyleUrl || null,
+
+          // [west, south, east, north]
           bounds: [121.56, 13.88, 121.67, 13.98],
-          minZoom: 12,
-          maxZoom: 16,
-          packName: "lucena-map",
+
+          minZoom: Number(process.env.LUCENA_MAP_MIN_ZOOM || 12),
+          maxZoom: Number(process.env.LUCENA_MAP_MAX_ZOOM || 16),
+
+          packName: "farecheck-lucena-map",
         },
 
         minimumSupportedAppVersion: "1.0.0",
