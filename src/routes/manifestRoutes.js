@@ -2,6 +2,7 @@ const express = require("express");
 const crypto = require("crypto");
 const FareMatrix = require("../models/FareMatrix");
 const placesIndex = require("../../data/embedded-lucena-places.json");
+const { getRoutingGraphMetadata } = require("../utils/routingGraphMetadata");
 
 const router = express.Router();
 
@@ -66,6 +67,8 @@ router.get("/", async (req, res) => {
         },
 
         places: getPlacesMetadata(),
+
+        routingGraph: getRoutingGraphMetadata(),
 
         minimumSupportedAppVersion: "1.0.0",
       },
