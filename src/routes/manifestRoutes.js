@@ -1,7 +1,35 @@
 const express = require("express");
+const crypto = require("crypto");
 const FareMatrix = require("../models/FareMatrix");
+const placesIndex = require("../../data/embedded-lucena-places.json");
 
 const router = express.Router();
+
+function createHash(data) {
+  return crypto
+    .createHash("sha256")
+    .update(JSON.stringify(data))
+    .digest("hex");
+}
+
+function getPlacesMetadata() {
+  const places = Array.isArray(placesIndex.places) ? placesIndex.places : [];
+
+  return {
+    enabled: true,
+    version: Number(placesIndex.version || 1),
+    dataType: placesIndex.dataType || "lucena_places_search_index",
+    source: placesIndex.source || "OpenStreetMap + cleaned Lucena places",
+    generatedAt: placesIndex.generatedAt || null,
+    count: places.length,
+    hash: createHash({
+      version: placesIndex.version,
+      generatedAt: placesIndex.generatedAt,
+      places,
+    }),
+    endpoint: "/api/v1/places/latest",
+  };
+}
 
 router.get("/", async (req, res) => {
   try {
@@ -36,6 +64,8 @@ router.get("/", async (req, res) => {
 
           packName: "farecheck-lucena-map",
         },
+
+        places: getPlacesMetadata(),
 
         minimumSupportedAppVersion: "1.0.0",
       },

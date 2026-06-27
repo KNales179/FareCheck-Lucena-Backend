@@ -11,6 +11,7 @@ const healthRoutes = require("./src/routes/healthRoutes");
 const fareMatrixRoutes = require("./src/routes/fareMatrixRoutes");
 const manifestRoutes = require("./src/routes/manifestRoutes");
 const adminFareMatrixRoutes = require("./src/routes/adminFareMatrixRoutes");
+const placesRoutes = require("./src/routes/placesRoutes");
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use("/health", healthRoutes);
 app.use("/api/v1/fare-matrix", fareMatrixRoutes);
 app.use("/api/v1/manifest", manifestRoutes);
 app.use("/api/v1/admin", adminFareMatrixRoutes);
+app.use("/api/v1/places", placesRoutes);
 
 app.use((req, res) => {
   res.status(404).json({
